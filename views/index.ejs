@@ -1,0 +1,41 @@
+<!-- views/index.ejs -->
+
+<!doctype>
+
+<html>
+    <head>
+        <title>Node Authentication</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+
+    </head>
+    <body>
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/login">login</a></li>
+            <li><a href="/signup">sigup</a></li>
+            <li><a href="/argument">Write an argument</a></li>
+          </ul>
+        </div>
+      </nav>
+        <div class="container">
+            <h1>Argumentora</h1>
+              <% for(let i=0; i<docs.length;i++){ %>
+                <div class="row">
+                  <div class="col-md-6 well">
+                    <h2><%= docs[i].title  %></h2>
+                    <p><%= docs[i].argument  %></p>
+                    </div>
+                  <div class="col-md-6">
+                    <h3>Counterpositions</h3>
+                  </div>
+                </div>
+              <% } %>
+         </div>
+     </body>
+ </html>
