@@ -1,32 +1,91 @@
-!<!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <script type="text/javascript">
+
+    </script>
+    <style media="screen">
+html {
+  font-family: "Helevetica", sans-serif;
+}
+
+body {
+  color: #333;
+  font-weight: 100;
+  margin: 0 auto;
+}
+
+div:focus {
+  outline: none;
+}
+
+#heading {
+  font-size: 48px;
+  padding-top: 30px;
+}
+
+#content {
+  padding-top: 10px;
+  font-size: 24px;
+}
+    </style>
     <meta charset="utf-8">
     <title>Write an argument</title>
   </head>
   <body>
+    <div class="container-fluid">
+      <div class="row">
+      <% args.forEach(function(data){  %>
+          <div class="col-md-1">
+            <h4 class="titlelink"><%= data.title %></h4>
+          </div>
+      <% }) %>
+    </div>
+    </div>
     <div class="container">
-      <h1>Write an Argument</h1>
-      <%= user.local.email %>
-      <%= user.local.password %>
-      <%= user.local.date_of_birth %>
-      <%= user.local.name %>
-
-      <form class="" action="/argument" method="post">
-        <div class="form-group">
-          <label>Title</label>
-          <input type="text" class="form-control" name="title" value="">
-        </div>
-        <div class="form-group">
-          <label>Argumentation</label>
-          <input type="text" class="form-control" name="argument" value="">
-        </div>
-        <button type="submit" class="btn btn-warning btn-lg" name="">Save Argument</button>
-      </form>
+      <div class="row">
+        <h1>Write an Argument</h1>
+        <div id="heading" contenteditable="true"></div>
+        <div id="content" contenteditable="true"></div>
+        <button id="newArgument" type="button" name="new_argument">New Argument</button>
+        <button id="button" type="button" name="button">Save Argument</button>
+      </div>
     </div>
   </body>
+  <script type="text/javascript">
+    document.getElementById("heading").innerHTML = localStorage["title"] || "Title of your Argument"; // default text
+    document.getElementById("content").innerHTML = localStorage["text"] || "Text of your argument "; // default text
+    setInterval(function() {
+   // fuction that is saving the innerHTML of the div
+    localStorage["title"] = document.getElementById("heading").innerHTML; // heading div
+    localStorage["text"] = document.getElementById("content").innerHTML; // content div
+    }, 1000);
+    $('#button').click(function(){
+      $.post("/argument", {
+        title : $('#heading').text(),
+        argument : $('#content').text()
+      })
+    })
+  $('#newArgument').click(function(){
+    $('#heading').text('New Argument Title')
+    $('#content').text('New Argument Content')
+  })
+
+  $('.titlelink').click(function(e){
+    let t = $(e.currentTarget).text()
+    $.post("/argument/list", {
+      title : t
+    }, function(data){
+      $('#heading').text(data.docs[0].title)
+      $('#content').text(data.docs[0].argument)
+    })
+  })
+
+
+
+  </script>
 </html>

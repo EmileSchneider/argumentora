@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 
 var argumentSchema = mongoose.Schema({
   author : {
-    first_name : String,
-    last_name : String
+    email : String,
   },
   title : String,
   argument : String

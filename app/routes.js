@@ -27,14 +27,37 @@ module.exports = function(app, passport) {
     // Argumentation
     // =============
     app.get('/argument', isLoggedIn, function(req, res){
-      res.render('write_argument.ejs', {
-        user : req.user
-      });
+      db.collection('arguments').find(
+        { author :
+          { email : 'admin'},
+        }
+      ).toArray(function(err, docs){
+        res.render('write_argument.ejs', {
+          user : req.user,
+          args : docs
+        });
+      })
+
+
+    })
+
+    app.post('/argument/list', isLoggedIn, function(req, res){
+      Argument.find({title : req.body.title}, function(err, docs){
+        console.log(docs);
+        res.send({ docs : docs})
+      })
     })
 
     app.post('/argument', function(req, res){
-      var arg = new Argument(req.body)
-      arg.save()
+      var arg = new Argument({ author : {email : req.user.local.email }, title: req.body.title, argument : req.body.argument})
+      if(Argument.find({title : req.body.title}).length === 0) {
+        //check if there is no argument with the same title
+        Argument.findOneAndUpdate({title : req.body.title}, {$set: {argument : req.body.argument}}, function(err, docs){
+        })
+      } else {
+        console.log('/////');
+        arg.save()
+      }
       res.redirect('/argument')
 
     })
